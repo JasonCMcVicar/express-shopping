@@ -3,23 +3,22 @@ const { NotFoundError } = require("./expressError");
 const app = express();
 
 const itemRouter = require("./itemRoutes");
-
-
+const { items } = require("./fakeDb");
 const morgan = require("morgan");
+
 // const request = require("supertest");
 
-// // process JSON body => req.body
-// app.use(express.json());
+
 
 // // process traditional form data => req.body
 // app.use(express.urlencoded({ extended: true }));
 
 //simple logging info for middleware
 app.use(morgan('dev'));
-app.use("/item", itemRouter);
 
-
-
+// process JSON body => req.body
+app.use(express.json());
+app.use("/items", itemRouter);
 
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
