@@ -20,10 +20,11 @@ itemRouter.get("/", function (req, res) {
    Return: {added: {name: "popsicle", price: 1.45}}
  */
 itemRouter.post("/", function (req, res) {
-  debugger;
-  const {name, price} = req.body;
-  items.push(req.body);
-  return res.send({"added": name, "price": price});
+  const newItem = req.body;
+  items.push(newItem);
+  return res.send({
+    "added": newItem.name,
+    "price": newItem.price});
 });
 
 module.exports = itemRouter;
