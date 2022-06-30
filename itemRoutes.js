@@ -4,6 +4,7 @@ const express = require("express");
 
 const itemRouter = new express.Router();
 const { items } = require("./fakeDb");
+const { NotFoundError } = require("./expressError");
 
 /** Return all items in shopping list as object
  * { items: [
@@ -26,5 +27,23 @@ itemRouter.post("/", function (req, res) {
     "added": newItem.name,
     "price": newItem.price});
 });
+
+/** Accept a json item and return that single json item
+ *
+ * {name: "popsicle", "price": 1.45}*/
+
+itemRouter.get("/:name", function (req, res) {
+  const targetItem = req.params.name;
+  debugger;
+  for (item in items) {
+    if (item["name"] === targetItem){
+      return res.send({ "name": `${item["name"]}`,
+                        "price": `${item["price"]}`})
+    }
+  }
+
+  throw new NotFoundError("No such item");
+
+})
 
 module.exports = itemRouter;
