@@ -25,7 +25,8 @@ itemRouter.post("/", function (req, res) {
   items.push(newItem);
   return res.send({
     "added": newItem.name,
-    "price": newItem.price});
+    "price": newItem.price
+  });
 });
 
 /** Accept a json item and return that single json item
@@ -34,16 +35,45 @@ itemRouter.post("/", function (req, res) {
 
 itemRouter.get("/:name", function (req, res) {
   const targetItem = req.params.name;
-  debugger;
-  for (item in items) {
-    if (item["name"] === targetItem){
-      return res.send({ "name": `${item["name"]}`,
-                        "price": `${item["price"]}`})
+  for (let item of items) {
+    debugger;
+    if (item["name"] === targetItem) {
+      return res.send({
+        "name": `${item["name"]}`,
+        "price": `${item["price"]}`
+      });
     }
   }
 
   throw new NotFoundError("No such item");
 
+});
+
+/** DOCSTRING TODO */
+itemRouter.patch("/:name", function (req, res) {
+  const targetItem = req.params.name;
+  for (let item of items) {
+    if (item["name"] === targetItem) {
+      item.name = req.body.name || item.name;
+      item.price = req.body.price || item.price;
+      return res.send({ "updated": item });
+    }
+  }
+
+  throw new NotFoundError("No such item");
+});
+
+/** DOCSTRING TODO DELETE */
+itemRouter.delete("/:name", function (req, res) {
+  const targetItem = req.params.name;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i]["name"] === targetItem) {
+      items.splice(i, 1);
+      return res.send({ "message": "Deleted" });
+    }
+  }
+
+  throw new NotFoundError("No such item");
 })
 
 module.exports = itemRouter;
